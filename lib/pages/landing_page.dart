@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './quizz_page.dart';
+
 class LandingPage extends StatelessWidget {
   final _title = new TextStyle(
       color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold);
@@ -12,7 +14,7 @@ class LandingPage extends StatelessWidget {
     return new Material(
       color: Colors.greenAccent,
       child: new InkWell(
-        onTap: () => print("We tapped the page, you pepe."),
+        onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new QuizzPage())),
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
