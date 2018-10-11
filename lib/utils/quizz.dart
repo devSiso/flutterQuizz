@@ -11,7 +11,7 @@ class Quizz {
 
   List<Question> get questions => _questions;
   int get length => _questions.length;
-  int get questionNumber => _currentQuestionIndex+1;
+  int get questionNumber => _currentQuestionIndex + 1;
   int get score => _score;
 
   Question get nextQuestion {

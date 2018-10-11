@@ -19,7 +19,7 @@ class QuestionTextState extends State<QuestionText>
   void initState() {
     super.initState();
     _fontSizeAnimationController = new AnimationController(
-        duration: new Duration(milliseconds: 1200), vsync: this);
+        duration: new Duration(milliseconds: 1000), vsync: this);
     _fontSizeAnimation = new CurvedAnimation(
         parent: _fontSizeAnimationController, curve: Curves.bounceOut);
     _fontSizeAnimation.addListener(() => this.setState(() {}));
@@ -49,7 +49,7 @@ class QuestionTextState extends State<QuestionText>
       child: new Padding(
         padding: new EdgeInsets.symmetric(vertical: 20.0),
         child: new Center(
-          child: new Text(
+          child: Text(
               "Statement ${widget._questionNumber.toString()}: ${widget._question}.",
               style: _textStyle),
         ),

@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../utils/questions.dart';
 import '../utils/quizz.dart';
@@ -15,31 +19,50 @@ class QuizzPage extends StatefulWidget {
 }
 
 class QuizzPageState extends State<QuizzPage> {
+  List<Question> questions;
+  Quizz quizz;
   Question currentQuestion;
-  Quizz quizz = new Quizz([
-    new Question("Elon musk is human", false),
-    new Question("Apple is better than Google", true),
-    new Question("Pizza is healthy", false),
-    new Question("Bonoro is a kind of Brazillian Hitler", true),
-    new Question("Luisinha is the best project manager", true),
-  ]);
-
   String questionText;
   int questionNumber;
   bool isCorrect;
   bool overlayShouldBeVisible = false;
 
+  Future<List> getData() async {
+    http.Response response = await http.get(
+        Uri.encodeFull("http://10.10.4.97:3000/questions"),
+        headers: {"Accept": "application/json"});
+
+    return json.decode(response.body);
+  }
+
+  void populateQuestions(List list) {
+    list.forEach((item) {
+      this.questions.add(new Question(item['question'], item['answer']));
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    currentQuestion = quizz.nextQuestion;
-    questionText = currentQuestion.question;
-    questionNumber = quizz.questionNumber;
+    this.questions = new List<Question>();
+    this.startQuiz();
+  }
+
+  void startQuiz() async {
+    List data = await this.getData();
+    this.populateQuestions(data);
+    this.quizz = new Quizz(questions);  
+
+    this.setState(() {
+      this.currentQuestion = this.quizz.nextQuestion;
+      this.questionText = this.currentQuestion.question;
+      this.questionNumber = this.quizz.questionNumber;
+    });
   }
 
   void handleAnswer(bool answer) {
     isCorrect = (currentQuestion.answer == answer);
-    quizz.answer(isCorrect);
+    this.quizz.answer(isCorrect);
     this.setState(() {
       overlayShouldBeVisible = true;
     });
@@ -60,17 +83,20 @@ class QuizzPageState extends State<QuizzPage> {
         ),
         overlayShouldBeVisible == true
             ? new CorrectWrongOverlay(isCorrect, () {
+                getData();
                 if (quizz.length == questionNumber) {
-                  Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          new ScorePage(quizz.score, quizz.length)),(Route route) => route == null);
+                  Navigator.of(context).pushAndRemoveUntil(
+                      new MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              new ScorePage(quizz.score, quizz.length)),
+                      (Route route) => route == null);
                   return;
                 }
                 currentQuestion = quizz.nextQuestion;
                 this.setState(() {
                   overlayShouldBeVisible = false;
                   questionText = currentQuestion.question;
-                  questionNumber = quizz.questionNumber;
+                  questionNumber = this.quizz.questionNumber;
                 });
               })
             : new Container()

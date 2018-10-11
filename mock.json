@@ -1,0 +1,39 @@
+{
+    "questions": [{
+            "question": "Fruits haven't sugar.",
+            "answer": false
+        },
+        {
+            "question": "BMW is a retail company",
+            "answer": false
+        },
+        {
+            "question": "MacBook 2015 can have its parts changed.",
+            "answer": false
+        },
+        {
+            "question": "Windows OS have compatibility with Xcode 12.0",
+            "answer": false
+        },
+        {
+            "question": "Mars have liquid water.",
+            "answer": true
+        },
+        {
+            "question": "The universe expansion process was surpassed the speed of light.",
+            "answer": true
+        },
+        {
+            "question": "When two hurricanes are fused results a monster hurricane.",
+            "answer": false
+        },
+        {
+            "question": "Egg is a vegetarian food",
+            "answer": true
+        },
+        {
+            "question": "Egg is a vegan food",
+            "answer": false
+        }
+    ]
+}
